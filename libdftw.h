@@ -16,6 +16,14 @@ enum {
 #define FTW_NS	 FTW_NS
 };
 
+#define DFTW_CONTINUE 0
+#define DFTW_SKIP_SUBTREE 1
+
+/*
+ * Callbacks should return DFTW_CONTINUE to continue traversal. Returning
+ * DFTW_SKIP_SUBTREE from an FTW_D callback skips descending into that
+ * directory while allowing the walk to continue elsewhere.
+ */
 void dftw(const char *dirpath,
         int (*fn) (const char *fpath, const struct stat *sb, int typeflag));
 

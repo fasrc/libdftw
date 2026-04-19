@@ -36,6 +36,7 @@ void DFTW_create(CIRCLE_handle* handle)
 void DFTW_process(CIRCLE_handle* handle)
 {
     struct stat st;
+    int cb_rc = DFTW_CONTINUE;
     int status = 0;
 
     char temp[CIRCLE_MAX_STRING_LEN];
@@ -51,8 +52,10 @@ void DFTW_process(CIRCLE_handle* handle)
     }
 
     else if(S_ISDIR(st.st_mode) && !(S_ISLNK(st.st_mode))) {
-        _DFTW_CB(temp, &st, FTW_D);
-        DFTW_process_dir(temp, handle);
+        cb_rc = _DFTW_CB(temp, &st, FTW_D);
+        if(cb_rc == DFTW_CONTINUE) {
+            DFTW_process_dir(temp, handle);
+        }
     }
     else if(S_ISREG(st.st_mode)) {
         _DFTW_CB(temp, &st, FTW_F);
